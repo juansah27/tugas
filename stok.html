@@ -21,12 +21,17 @@
 
     <div class="container">
         <div class="page-header">
-            <h2>Stok Bahan Ajar</h2>
-            <p>Lihat ketersediaan buku per mata kuliah</p>
+            <div class="page-header-content">
+                <h2>📚 Stok Bahan Ajar</h2>
+                <p>Lihat dan kelola ketersediaan buku per mata kuliah</p>
+            </div>
+            <button class="btn-primary" id="addStokBtn" onclick="openAddStokModal()">
+                ➕ Tambah Stok Baru
+            </button>
         </div>
 
         <div class="filter-box">
-            <input type="text" id="searchInput" placeholder="Cari buku...">
+            <input type="text" id="searchInput" placeholder="🔍 Cari buku...">
         </div>
 
         <div class="table-responsive">
@@ -40,6 +45,7 @@
                         <th>Jenis</th>
                         <th>Edisi</th>
                         <th>Stok</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +54,112 @@
         </div>
     </div>
 
+    <!-- Modal Tambah Stok -->
+    <div id="addStokModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal="addStokModal">&times;</span>
+            <h2>➕ Tambah Stok Baru</h2>
+            <form id="addStokForm">
+                <div class="form-group">
+                    <label for="kodeLokasiInput">Kode Lokasi *</label>
+                    <input type="text" id="kodeLokasiInput" required placeholder="Contoh: 0JKT01">
+                    <div class="field-error" id="kodeLokasiError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kodeBarangInput">Kode Barang *</label>
+                    <input type="text" id="kodeBarangInput" required placeholder="Contoh: EKMA4216">
+                    <div class="field-error" id="kodeBarangError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="namaBarangInput">Nama Buku *</label>
+                    <input type="text" id="namaBarangInput" required placeholder="Masukkan nama buku">
+                    <div class="field-error" id="namaBarangError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jenisBarangInput">Jenis Barang *</label>
+                    <select id="jenisBarangInput" required>
+                        <option value="">Pilih Jenis</option>
+                        <option value="BMP">BMP (Bahan Materi Pokok)</option>
+                        <option value="BUP">BUP (Bahan Ujian Pokok)</option>
+                        <option value="BTT">BTT (Bahan Tambahan Terpilih)</option>
+                    </select>
+                    <div class="field-error" id="jenisBarangError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edisiInput">Edisi *</label>
+                    <input type="text" id="edisiInput" required placeholder="Contoh: 1, 2, 3">
+                    <div class="field-error" id="edisiError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="stokInput">Stok *</label>
+                    <input type="number" id="stokInput" required min="0" placeholder="Masukkan jumlah stok">
+                    <div class="field-error" id="stokError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="coverInput">URL Cover (Opsional)</label>
+                    <input type="text" id="coverInput" placeholder="img/nama_cover.jpg">
+                    <div class="field-error" id="coverError"></div>
+                    <small style="color: var(--text-secondary); font-size: 0.85rem;">Kosongkan untuk menggunakan gambar default</small>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <span id="addBtnText">Tambah Stok</span>
+                    <span id="addBtnLoader" class="btn-loader" style="display: none;"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
     <script src="js/data.js"></script>
     <script src="js/stok.js"></script>
+    
+    <!-- Toast notification function if not loaded -->
+    <script>
+        if (typeof showToast === 'undefined') {
+            function showToast(type, title, message) {
+                const container = document.getElementById('toastContainer');
+                if (!container) {
+                    alert(`${title}: ${message}`);
+                    return;
+                }
+                
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                const icons = {
+                    success: '✓',
+                    error: '✕',
+                    info: 'ℹ',
+                    warning: '⚠'
+                };
+                
+                toast.innerHTML = `
+                    <span class="toast-icon">${icons[type] || ''}</span>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                    <span class="toast-close" onclick="this.parentElement.remove()">×</span>
+                `;
+                
+                container.appendChild(toast);
+                
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 3000);
+            }
+        }
+    </script>
 </body>
 </html>
