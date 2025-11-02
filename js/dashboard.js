@@ -15,7 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Display user name
+    // Display greeting and user name
+    const greetingEl = document.getElementById('greeting');
+    if (greetingEl) {
+        greetingEl.textContent = getGreeting();
+    }
     userNameEl.textContent = currentUser.nama;
     
     // Load logout functionality with event delegation
@@ -50,6 +54,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display tracking table with DocumentFragment
     displayTrackingTable(trackingData);
 });
+
+// Get greeting based on local time
+function getGreeting() {
+    const hour = new Date().getHours();
+    
+    if (hour >= 5 && hour < 12) {
+        return 'Selamat Pagi,';
+    } else if (hour >= 12 && hour < 15) {
+        return 'Selamat Siang,';
+    } else if (hour >= 15 && hour < 19) {
+        return 'Selamat Sore,';
+    } else {
+        return 'Selamat Malam,';
+    }
+}
 
 // Reusable logout handler
 function handleLogout(e) {
