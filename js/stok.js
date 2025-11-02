@@ -127,11 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayStokTable(dataBahanAjar);
                 
                 // Show success message
-                if (typeof showToast === 'function') {
-                    showToast('success', 'Berhasil', 'Stok baru berhasil ditambahkan!');
-                } else {
-                    alert('Stok baru berhasil ditambahkan!');
-                }
+                showToast('success', 'Berhasil', 'Stok baru berhasil ditambahkan!');
                 
                 // Reset and close modal
                 addStokForm.reset();
@@ -260,36 +256,108 @@ function showFieldError(fieldId, message) {
 
 // Delete stok function
 function deleteStok(index) {
-    if (!confirm('Apakah Anda yakin ingin menghapus stok ini?')) {
-        return;
-    }
-    
     if (index < 0 || index >= dataBahanAjar.length) {
-        alert('Error: Data tidak ditemukan');
+        showToast('error', 'Error', 'Data tidak ditemukan');
         return;
     }
     
     const book = dataBahanAjar[index];
     
-    // Remove from array
-    dataBahanAjar.splice(index, 1);
-    
-    // Refresh table
-    displayStokTable(dataBahanAjar);
-    
-    // Show success message
-    if (typeof showToast === 'function') {
-        showToast('success', 'Berhasil', `Stok "${book.namaBarang}" berhasil dihapus!`);
-    } else {
-        alert(`Stok "${book.namaBarang}" berhasil dihapus!`);
+    // Show confirmation modal
+    showConfirmDialog(
+        'Hapus Stok',
+        `Apakah Anda yakin ingin menghapus stok "${book.namaBarang}"?`,
+        function() {
+            // User confirmed
+            dataBahanAjar.splice(index, 1);
+            displayStokTable(dataBahanAjar);
+            showToast('success', 'Berhasil', `Stok "${book.namaBarang}" berhasil dihapus!`);
+        }
+    );
+}
+
+// Show toast function (ensured to be available)
+if (typeof showToast === 'undefined') {
+    function showToast(type, title, message) {
+        const container = document.getElementById('toastContainer');
+        if (!container) {
+            console.log(`${title}: ${message}`);
+            return;
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: '✓',
+            error: '✕',
+            info: 'ℹ',
+            warning: '⚠'
+        };
+        
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || ''}</span>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <span class="toast-close" onclick="this.parentElement.remove()">×</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 3000);
     }
 }
 
-// Show toast function (fallback if not defined in login.js)
-if (typeof showToast === 'undefined') {
-    function showToast(type, title, message) {
-        // Simple alert fallback
-        alert(`${title}: ${message}`);
-    }
+// Show confirmation dialog
+function showConfirmDialog(title, message, onConfirm) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    modalContent.style.maxWidth = '450px';
+    
+    modalContent.innerHTML = `
+        <h2>${title}</h2>
+        <p style="margin: 20px 0; color: var(--text-secondary);">${message}</p>
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+            <button class="btn-primary btn-cancel" style="background: var(--text-secondary);">
+                Batal
+            </button>
+            <button class="btn-primary btn-confirm" style="background: var(--error-color);">
+                Hapus
+            </button>
+        </div>
+    `;
+    
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    
+    // Close on background click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Button handlers
+    const confirmBtn = modalContent.querySelector('.btn-confirm');
+    const cancelBtn = modalContent.querySelector('.btn-cancel');
+    
+    confirmBtn.addEventListener('click', function() {
+        onConfirm();
+        modal.remove();
+    });
+    
+    cancelBtn.addEventListener('click', function() {
+        modal.remove();
+    });
 }
 
