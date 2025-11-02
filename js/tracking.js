@@ -30,36 +30,60 @@ function handleLogout(e) {
     window.location.href = 'login.html';
 }
 
-// Optimized search tracking function
+// Optimized search tracking function with loading state
 function searchTracking() {
     const searchInput = document.getElementById('searchInput');
     const nomorDO = searchInput.value.trim();
     const trackingResult = document.getElementById('trackingResult');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchBtnText = document.getElementById('searchBtnText');
+    const searchBtnLoader = document.getElementById('searchBtnLoader');
     
     // Check if dataTracking is available
     if (typeof dataTracking === 'undefined') {
-        trackingResult.innerHTML = '<div class="message error">Error: Data tracking tidak ditemukan</div>';
+        trackingResult.innerHTML = '<div class="message error">⚠️ Error: Data tracking tidak ditemukan</div>';
         return;
     }
     
     if (!nomorDO) {
-        trackingResult.innerHTML = '<div class="message error">Masukkan nomor DO terlebih dahulu</div>';
+        trackingResult.innerHTML = '<div class="message error">⚠️ Masukkan nomor DO terlebih dahulu</div>';
         return;
     }
     
-    // Search for tracking data
-    const trackingData = dataTracking[nomorDO];
+    // Show loading state
+    searchBtn.disabled = true;
+    searchBtnText.style.display = 'none';
+    searchBtnLoader.style.display = 'inline-block';
+    trackingResult.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Mencari data tracking...</p></div>';
     
-    if (!trackingData) {
-        trackingResult.innerHTML = '<div class="message error">Nomor DO tidak ditemukan</div>';
-        return;
-    }
-    
-    // Display tracking information
-    displayTrackingResult(trackingData);
+    // Simulate async search (in real app, this would be API call)
+    setTimeout(() => {
+        // Search for tracking data
+        const trackingData = dataTracking[nomorDO];
+        
+        // Reset button state
+        searchBtn.disabled = false;
+        searchBtnText.style.display = 'inline';
+        searchBtnLoader.style.display = 'none';
+        
+        if (!trackingData) {
+            trackingResult.innerHTML = `
+                <div class="error-state">
+                    <div class="error-icon">❌</div>
+                    <h3>Nomor DO Tidak Ditemukan</h3>
+                    <p>Nomor DO <strong>${nomorDO}</strong> tidak ditemukan dalam sistem.</p>
+                    <p class="error-hint">Pastikan nomor DO yang Anda masukkan sudah benar.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Display tracking information
+        displayTrackingResult(trackingData);
+    }, 500);
 }
 
-// Optimized result display with template
+// Optimized result display with modern template
 function displayTrackingResult(data) {
     const trackingResult = document.getElementById('trackingResult');
     const statusLower = data.status.toLowerCase();
@@ -67,50 +91,124 @@ function displayTrackingResult(data) {
         : statusLower.includes('dalam perjalanan') ? 'proses' 
         : 'dikirim';
     
-    // Build timeline HTML more efficiently
+    const statusIcon = statusLower.includes('selesai') ? '✓' 
+        : statusLower.includes('dalam perjalanan') ? '🚚' 
+        : '📦';
+    
+    // Calculate progress percentage
+    const totalSteps = data.perjalanan ? data.perjalanan.length : 0;
+    const progressPercentage = statusLower.includes('selesai') ? 100 
+        : totalSteps > 0 ? Math.min((totalSteps / 6) * 100, 90) : 0;
+    
+    // Build timeline HTML more efficiently with enhanced design
     const timelineHTML = (data.perjalanan && data.perjalanan.length > 0) 
-        ? '<div class="tracking-timeline"><h4>Riwayat Pengiriman</h4>' +
-          data.perjalanan.map(item => `
-            <div class="timeline-item">
-                <div class="timeline-time">${item.waktu}</div>
-                <div class="timeline-desc">${item.keterangan}</div>
+        ? `
+        <div class="tracking-timeline-modern">
+            <div class="timeline-header">
+                <h4>📍 Riwayat Pengiriman</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                </div>
+                <div class="progress-text">${Math.round(progressPercentage)}% Selesai</div>
             </div>
-          `).join('') + '</div>'
+            <div class="timeline-container">
+                ${data.perjalanan.map((item, index) => {
+                    const isLast = index === data.perjalanan.length - 1;
+                    const isFirst = index === 0;
+                    return `
+                    <div class="timeline-item-modern ${isLast ? 'completed' : ''} ${isFirst ? 'current' : ''}">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-time-modern">${formatDateTime(item.waktu)}</div>
+                            <div class="timeline-desc-modern">${item.keterangan}</div>
+                        </div>
+                    </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+        `
         : '';
     
     trackingResult.innerHTML = `
-        <div class="tracking-info">
-            <h3>Informasi Pengiriman</h3>
-            <div class="info-row">
-                <span class="info-label">Nomor DO:</span>
-                <span class="info-value">${data.nomorDO}</span>
+        <div class="tracking-card-modern">
+            <div class="tracking-header-modern">
+                <div class="tracking-status-large">
+                    <div class="status-icon-large ${statusClass}">${statusIcon}</div>
+                    <div class="status-text-large">
+                        <h3>${data.status}</h3>
+                        <p>Nomor DO: <strong>${data.nomorDO}</strong></p>
+                    </div>
+                </div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Nama:</span>
-                <span class="info-value">${data.nama}</span>
+            
+            <div class="tracking-info-grid">
+                <div class="info-card">
+                    <div class="info-icon">👤</div>
+                    <div class="info-content">
+                        <div class="info-label-modern">Penerima</div>
+                        <div class="info-value-modern">${data.nama}</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">🚚</div>
+                    <div class="info-content">
+                        <div class="info-label-modern">Ekspedisi</div>
+                        <div class="info-value-modern">${data.ekspedisi}</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">📅</div>
+                    <div class="info-content">
+                        <div class="info-label-modern">Tanggal Kirim</div>
+                        <div class="info-value-modern">${formatDate(data.tanggalKirim)}</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">📦</div>
+                    <div class="info-content">
+                        <div class="info-label-modern">Kode Paket</div>
+                        <div class="info-value-modern">${data.paket}</div>
+                    </div>
+                </div>
+                
+                <div class="info-card total-card">
+                    <div class="info-icon">💰</div>
+                    <div class="info-content">
+                        <div class="info-label-modern">Total Biaya</div>
+                        <div class="info-value-modern total-amount">${data.total}</div>
+                    </div>
+                </div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Status:</span>
-                <span class="info-value"><span class="status-badge ${statusClass}">${data.status}</span></span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Ekspedisi:</span>
-                <span class="info-value">${data.ekspedisi}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Tanggal Kirim:</span>
-                <span class="info-value">${data.tanggalKirim}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Paket:</span>
-                <span class="info-value">${data.paket}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Total:</span>
-                <span class="info-value">${data.total}</span>
-            </div>
+            
+            ${timelineHTML}
         </div>
-        ${timelineHTML}
     `;
+}
+
+// Helper function to format date
+function formatDate(dateString) {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('id-ID', options);
+}
+
+// Helper function to format date and time
+function formatDateTime(dateTimeString) {
+    if (!dateTimeString) return '-';
+    const date = new Date(dateTimeString);
+    const options = { 
+        weekday: 'short',
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    return date.toLocaleDateString('id-ID', options);
 }
 

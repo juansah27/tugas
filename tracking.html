@@ -21,13 +21,19 @@
 
     <div class="container">
         <div class="page-header">
-            <h2>Tracking Paket</h2>
-            <p>Cek status pengiriman paket Anda</p>
+            <div class="page-header-content">
+                <h2>📦 Tracking Paket</h2>
+                <p>Cek status pengiriman paket Anda secara real-time</p>
+            </div>
         </div>
 
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Masukkan nomor DO...">
-            <button onclick="searchTracking()" class="btn-primary">Cari</button>
+        <div class="search-box-modern">
+            <div class="search-icon">🔍</div>
+            <input type="text" id="searchInput" placeholder="Masukkan nomor DO (contoh: 2023001234)" autocomplete="off">
+            <button onclick="searchTracking()" class="btn-primary" id="searchBtn">
+                <span id="searchBtnText">Cari</span>
+                <span id="searchBtnLoader" class="btn-loader" style="display: none;"></span>
+            </button>
         </div>
 
         <div id="trackingResult" class="tracking-result"></div>
