@@ -9,7 +9,10 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <h1 class="nav-brand">SITTA</h1>
+            <div class="nav-brand-container">
+                <img src="img/Logo UT.png" alt="Universitas Terbuka" class="nav-logo">
+                <h1 class="nav-brand">SITTA</h1>
+            </div>
             <ul class="nav-menu">
                 <li><a href="dashboard.html" class="active">Dashboard</a></li>
                 <li><a href="tracking.html">Tracking</a></li>
@@ -21,8 +24,19 @@
 
     <div class="container">
         <div class="page-header">
-            <h2>Dashboard</h2>
-            <p><span id="greeting"></span> <span id="userName"></span></p>
+            <div class="page-header-left">
+                <h2>Dashboard</h2>
+                <p class="page-subtitle">Selamat datang kembali!</p>
+            </div>
+            <div class="page-header-right">
+                <div class="user-greeting">
+                    <span class="greeting-icon">👋</span>
+                    <div class="greeting-text">
+                        <span id="greeting" class="greeting-message"></span>
+                        <span id="userName" class="user-name"></span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="dashboard-cards">
