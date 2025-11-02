@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-brand">SITTA</h1>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="tracking.html">Tracking</a></li>
+                <li><a href="stok.html">Stok</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Dashboard</h2>
+            <p>Selamat datang, <span id="userName"></span></p>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Total Pengiriman Hari Ini</h3>
+                <p class="card-value" id="totalPengiriman">0</p>
+            </div>
+            <div class="card">
+                <h3>Paket Selesai</h3>
+                <p class="card-value" id="paketSelesai">0</p>
+            </div>
+            <div class="card">
+                <h3>Paket Dalam Perjalanan</h3>
+                <p class="card-value" id="paketProses">0</p>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <h3>Daftar Pengiriman Terbaru</h3>
+            <div class="table-responsive">
+                <table id="trackingTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nomor DO</th>
+                            <th>Nama</th>
+                            <th>Status</th>
+                            <th>Ekspedisi</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

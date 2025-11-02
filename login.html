@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SITTA UT</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <h1>SITTA</h1>
+                <p>Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
+                <p class="subtitle">Universitas Terbuka</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Masukkan email UT Anda">
+                    <div class="field-error" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Masukkan password">
+                    <div class="field-error" id="passwordError"></div>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="loginBtn">
+                    <span id="loginBtnText">Login</span>
+                    <span id="loginBtnLoader" class="btn-loader" style="display: none;"></span>
+                </button>
+                
+                <div class="form-links">
+                    <a href="#" id="lupaPasswordBtn">Lupa Password?</a>
+                    <a href="#" id="daftarBtn">Daftar</a>
+                </div>
+                
+                <div id="loginAlert" class="alert" style="display: none;"></div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Modal Lupa Password -->
+    <div id="lupaPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal="lupaPasswordModal">&times;</span>
+            <h2>Lupa Password</h2>
+            <form id="lupaPasswordForm">
+                <div class="form-group">
+                    <label for="emailReset">Email</label>
+                    <input type="email" id="emailReset" required placeholder="Masukkan email terdaftar">
+                    <div class="field-error" id="emailResetError"></div>
+                </div>
+                <button type="submit" class="btn-primary">Kirim Link Reset</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Daftar -->
+    <div id="daftarModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal="daftarModal">&times;</span>
+            <h2>Daftar Akun Baru</h2>
+            <form id="daftarForm">
+                <div class="form-group">
+                    <label for="namaDaftar">Nama Lengkap</label>
+                    <input type="text" id="namaDaftar" required placeholder="Masukkan nama lengkap">
+                    <div class="field-error" id="namaDaftarError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="emailDaftar">Email</label>
+                    <input type="email" id="emailDaftar" required placeholder="Masukkan email UT">
+                    <div class="field-error" id="emailDaftarError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="passwordDaftar">Password</label>
+                    <input type="password" id="passwordDaftar" required placeholder="Buat password">
+                    <div class="field-error" id="passwordDaftarError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="roleDaftar">Role</label>
+                    <select id="roleDaftar" required>
+                        <option value="">Pilih Role</option>
+                        <option value="UPBJJ-UT">UPBJJ-UT</option>
+                        <option value="Puslaba">Puslaba</option>
+                        <option value="Fakultas">Fakultas</option>
+                    </select>
+                    <div class="field-error" id="roleDaftarError"></div>
+                </div>
+                <button type="submit" class="btn-primary">Daftar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

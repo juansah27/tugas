@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-brand">SITTA</h1>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="tracking.html" class="active">Tracking</a></li>
+                <li><a href="stok.html">Stok</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Tracking Paket</h2>
+            <p>Cek status pengiriman paket Anda</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Masukkan nomor DO...">
+            <button onclick="searchTracking()" class="btn-primary">Cari</button>
+        </div>
+
+        <div id="trackingResult" class="tracking-result"></div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/tracking.js"></script>
+</body>
+</html>

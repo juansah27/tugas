@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-brand">SITTA</h1>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="tracking.html">Tracking</a></li>
+                <li><a href="stok.html" class="active">Stok</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Stok Bahan Ajar</h2>
+            <p>Lihat ketersediaan buku per mata kuliah</p>
+        </div>
+
+        <div class="filter-box">
+            <input type="text" id="searchInput" placeholder="Cari buku...">
+        </div>
+
+        <div class="table-responsive">
+            <table id="stokTable" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Cover</th>
+                        <th>Kode Lokasi</th>
+                        <th>Kode Barang</th>
+                        <th>Nama Buku</th>
+                        <th>Jenis</th>
+                        <th>Edisi</th>
+                        <th>Stok</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/stok.js"></script>
+</body>
+</html>
